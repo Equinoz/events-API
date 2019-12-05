@@ -17,7 +17,7 @@ Chaque évenement se présente sous la forme d'un document MongoDB du type:
 
 Chaque document organizer se présente ainsi:
 {
-  _id: ObjectID("<id de l'organizeur>"),
+  _id: ObjectID("<id de l'organizer>"),
   name: "acsp-brest",
   town: "Brest",
   address: "12 Rue de Kerelie, 29200 Brest",

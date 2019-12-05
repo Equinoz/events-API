@@ -1,0 +1,24 @@
+{
+  "name": "events-api",
+  "version": "1.0.0",
+  "description": "API recensant des événements/animations/manifestations",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Equinoz/events-API.git"
+  },
+  "author": "Julien Le Coz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Equinoz/events-API/issues"
+  },
+  "homepage": "https://github.com/Equinoz/events-API#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongodb": "^3.3.5"
+  }
+}
