@@ -1,37 +1,19 @@
-class DBConnect {
+// Fonction gérant les erreurs
 
-	constructor() {
-		this.connection = new Promise((resolve, reject) => {
-			MongoClient.connect("mongodb://" + hostname, {useUnifiedTopology: true}, (err, connection) => {
-				if (err) reject(err)
-				resolve(connection)
-			})
-		})
+function errorHandler(res, err) {
+	res.setHeader("Content-Type", ["text/plain", "charset=utf-8"])
+	switch (err){
+		case 404:
+			res.status(404).end("Ressource inexistante\n")
+			break
+		default:
+			res.status(500).end("Problème lors de l'accès à la base de données\n")
 	}
-
-	search(id=false) {
-		return new Promise((resolve, reject) => {
-			let match = (id) ? {_id: MongoObjectID(id)} : ""
-			this.connection.then(connection => {
-				connection.db("events").collection("organizers").find(match).toArray((err, results) => {
-					if (err) reject(err)
-					connection.close()
-					resolve({
-						type: "organizers",
-						total: results.length,
-						hits: results
-					})
-				})
-			})
-			.catch(err => { reject(err) })
-		})
-	}
-
 }
 
+
 let express = require("express"),
-		MongoClient = require("mongodb").MongoClient,
-		MongoObjectID = require("mongodb").ObjectID
+		DBConnect = require("./DBConnect")
 
 let hostname = "localhost",
 		port = 8080
@@ -39,17 +21,21 @@ let hostname = "localhost",
 let app = express()
 
 app.get("/organizers/", (req, res) => {
-	(new DBConnect()).search().then(results => {
+	(new DBConnect(hostname)).search()
+	.then(results => {
+		res.status(200).setHeader("Content-Type", ["application/json", "charset=utf-8"])
 		res.json(results)
 	})
-	.catch(err => { throw err })
+	.catch(err => { errorHandler(res, err) })
 })
 
 .get("/organizers/:id", (req, res) => {
-	(new DBConnect()).search(req.params.id).then(result => {
+	(new DBConnect(hostname)).search(req.params.id)
+	.then(result => {
+		res.status(200).setHeader("Content-Type", ["application/json", "charset=utf-8"])
 		res.json(result.hits[0])
 	})
-	.catch(err => { throw err })
+	.catch(err => { errorHandler(res, err) })
 })
 
 .listen(port, () => {
