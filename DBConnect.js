@@ -46,6 +46,16 @@ class DBConnect {
 		})
 	}
 
+	add(data) {
+		return new Promise((resolve, reject) => {
+			this.connection
+			.then(connection => {
+				resolve(connection.db("events").collection("organizers").insertOne(data))
+			})
+			.catch(err => { reject(err) })
+		})
+	}
+
 }
 
 module.exports = DBConnect

@@ -13,6 +13,7 @@ function errorHandler(res, err) {
 
 
 let express = require("express"),
+		bodyParser = require("body-parser"),
 		DBConnect = require("./DBConnect")
 
 let hostname = "localhost",
@@ -20,7 +21,16 @@ let hostname = "localhost",
 
 let app = express()
 
-app.get("/organizers/", (req, res) => {
+app.use(bodyParser.json({type: "application/json" }))
+app.use(bodyParser.urlencoded({extended: false, type: "application/x-www-form-urlencoded"}))
+app.use((req, res ,next) => {
+	res.setHeader("Access-Control-Allow-Origin", "*")
+	res.setHeader("Access-Control-Allow-Headers", "Content-Type")
+	next()
+})
+
+app.route("/organizers/")
+.get((req, res) => {
 	(new DBConnect(hostname)).search()
 	.then(results => {
 		res.status(200).setHeader("Content-Type", ["application/json", "charset=utf-8"])
@@ -29,7 +39,17 @@ app.get("/organizers/", (req, res) => {
 	.catch(err => { errorHandler(res, err) })
 })
 
-.get("/organizers/:id", (req, res) => {
+.post((req, res) => {
+	(new DBConnect(hostname)).add(req.body)
+	.then(result => {
+		res.status(201).setHeader("Content-Type", ["application/json", "charset=utf-8"])
+		res.json({id: result.insertedId})
+	})
+	.catch(err => { errorHandler(res, err) })
+})
+
+app.route("/organizers/:id")
+.get((req, res) => {
 	(new DBConnect(hostname)).search(req.params.id)
 	.then(result => {
 		res.status(200).setHeader("Content-Type", ["application/json", "charset=utf-8"])
@@ -38,6 +58,6 @@ app.get("/organizers/", (req, res) => {
 	.catch(err => { errorHandler(res, err) })
 })
 
-.listen(port, () => {
+app.listen(port, () => {
 	console.log("Serveur fonctionnant sur " + hostname + ":" + port)
 })
