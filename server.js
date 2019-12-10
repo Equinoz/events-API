@@ -36,7 +36,7 @@ app.route("/organizers/")
 		res.status(200).setHeader("Content-Type", ["application/json", "charset=utf-8"])
 		res.json(results)
 	})
-	.catch(err => { errorHandler(res, err) })
+	.catch(err => errorHandler(res, err))
 })
 
 .post((req, res) => {
@@ -45,7 +45,13 @@ app.route("/organizers/")
 		res.status(201).setHeader("Content-Type", ["application/json", "charset=utf-8"])
 		res.json({id: result.insertedId})
 	})
-	.catch(err => { errorHandler(res, err) })
+	.catch(err => errorHandler(res, err))
+})
+
+.delete((req, res) => {
+	(new DBConnect(hostname)).remove()
+	.then(() =>	res.status(204).end())
+	.catch(err => errorHandler(res, err))
 })
 
 app.route("/organizers/:id")
@@ -55,7 +61,13 @@ app.route("/organizers/:id")
 		res.status(200).setHeader("Content-Type", ["application/json", "charset=utf-8"])
 		res.json(result.hits[0])
 	})
-	.catch(err => { errorHandler(res, err) })
+	.catch(err => errorHandler(res, err))
+})
+
+.delete((req, res) => {
+	(new DBConnect(hostname)).remove(req.params.id)
+	.then(() => res.status(204).end())
+	.catch(err => errorHandler(res, err))
 })
 
 app.listen(port, () => {

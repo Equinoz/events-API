@@ -1,6 +1,16 @@
 # events-API
 API permettant de recenser des évenements et de mettre à disposition les informations les concernant.
 
+Consommation de l'API:
+Deux types de ressources: events ou organizers
+GET /<ressource>                  -> renvoie tout les éléments de la ressource
+GET /<ressource>/<id_élément>     -> renvoie l'élément spécifié
+POST /<ressource>                 -> crée un nouvel élément. Accepte des données de type JSON ou de type x-www-form-urlencoded
+PUT /<ressource>									-> crée de nouveaux éléments. Accepte des données sous forme de tableau de JSON
+PUT /<ressource>/<id_élément>     -> mets l'élément spécifié à jour
+DELETE /<ressource>							  -> supprime tout les éléments de la ressource
+DELETE /<ressource>/<id_élément>  -> supprime l'élément
+
 Chaque évenement se présente sous la forme d'un document MongoDB du type:
 {
   _id: ObjectID("<id de l'évenement>"),
@@ -26,11 +36,3 @@ Chaque document organizer se présente ainsi:
   mail: "mail@acsp-brest.fr",
   release: ISODate("2019-12-05T12:00:00.000")
 }
-
-Consommation de l'API:
-Deux types de ressources: events ou organizers
-GET /<ressource>                  -> renvoie tout les élements de la ressource
-GET /<ressource>/<id_élement>     -> renvoie l'élement spécifié
-POST /<ressource>                 -> crée un nouvel élement
-PUT /<ressource>/<id_élement>     -> mets l'élement à jour
-DELETE /<ressource>/<id_élement>  -> supprime l'élement
