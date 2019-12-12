@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" href="style.css" />
+		<title>Client pour tester l'API "events-API"</title>
+	</head>
+
+	<body>
+		<h1>Client pour tester l'API "events-API"</h1>
+
+		<!-- Choix de la ressource -->
+		<form>
+			<label for="resource">Selectionnez la ressource à manipuler</label>
+			<select name="resource" id="resource">
+				<option>Events</option>
+				<option>Organizers</option>
+			</select>
+		</form>
+
+		<!-- input -->
+		<div id="input">
+			<div>Choix de la méthode HTTP</div>
+
+			<ul>
+				<li class="focus">GET</li>
+				<li>POST</li>
+				<li>PUT</li>
+				<li>DELETE</li>
+			</ul>
+
+			<div id="data-input"></div>
+		</div>
+
+		<div>Résultat de la requête</div>
+
+		<!-- output -->
+		<div id="output"></div>
+
+		<script src="ajax.js"></script>
+		<script src="script.js"></script>
+	</body>
+</html>
