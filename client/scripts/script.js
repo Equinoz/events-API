@@ -1,63 +1,54 @@
+// Fonction permettant d'afficher les résultats de la requête en fonction du status, d'un tableau des headers et du corps
+function displayResults(reqStatus, reqHeaders, reqBody) {
+	let output = document.getElementById("output");
+		output.innerHTML = "";
+
+	if (reqStatus)
+		output.innerHTML += "Request status: " + reqStatus + "<br />";
+
+	if (reqHeaders)
+		for (header of reqHeaders)
+			output.innerHTML += header + "<br />";
+			
+	if (reqBody) {
+		if (reqHeaders && ~reqHeaders.indexOf("content-type: application/json"))
+			reqBody = jsonToHtml(JSON.parse(reqBody));
+		output.innerHTML += reqBody;
+	}
+}
+
 // Fonction ajoutant un événement submit sur le ou les formulaires affichés dans la div #input
 function addSubmitEvent(forms) {
 	for (let i=0; i<forms.length; i++) {
 		forms[i].addEventListener("submit", (e) => {
 			e.preventDefault();
-			let output = document.getElementById("output");
 			switch (method) {
 				case "GET":
-					output.textContent = method + " /" + resource + "/" + getInput.value;
+					ajaxGet("http://localhost:8080/" + resource + "/" + getInput.value, displayResults);
 					break;
 				case "POST":
-					let data = "form";
-					if (e.target.id === "jsonPost")
-						data = "json";
+					let data;
+					if (e.target.id === "jsonPost") {
+						let file = document.getElementById("file");
+						data = file.files[0].name;
+					}
+					else
+						data = new FormData(e.target);
 					output.textContent = method + " /" + resource + "/  " + data;
 					break;
 				case "PUT":
 					break;
 				case "DELETE":
-					output.textContent = method + " /" + resource + "/" + deleteInput.value;
+					let reset;
+					if (deleteInput.value === "")
+						reset = confirm("Attention, voulez-vous réellement supprimer toutes les données de la collection " + resource + "?");
+					if (deleteInput.value !== "" || reset)
+						ajaxDelete("http://localhost:8080/" + resource + "/" + deleteInput.value, displayResults);
 					break;
 			}
 		});
 	}
 }
-
-// Objet formsContent contenant pour chaque méthode le formulaire à afficher
-let formsContent = {
-	GET: '<form>\
-				<label for="getInput">Identifiant de la ressource à consulter (optionnel)</label>\
-				<input type="text" name="getInput" id="getInput" size=20 /><br />\
-				<input type="submit" value="Requête GET" />\
-				</form>',
-	POST: '<form id="formPost">\
-				<label for="name">Name</label>\
-				<input type="text" name="name" id="name" />\
-				<label for="town">Town</label>\
-				<input type="text" name="town" id="town" />\
-				<label for="address">Address</label>\
-				<input type="text" name="address" id="address" />\
-				<label for="website">Website</label>\
-				<input type="url" name="website" id="website" />\
-				<label for="mail">Mail</label>\
-				<input type="email" name="mail" id="mail" /><br />\
-				<label for="description">Description</label>\
-				<textarea name="description" id="description" rows="5"></textarea><br />\
-				<input type="submit" value="Requête POST via formulaire" />\
-				</form>\
-				<div class="separator">------ OU ------</div>\
-				<form id="jsonPost">\
-				<input type="file" name="file" id="file" />\
-				<input type="submit" value="Requête POST via document JSON" />\
-				</form>',
-	PUT : "",
-	DELETE: '<form>\
-					<label for="deleteForm">Identifiant de la ressource à supprimer (optionnel)</label>\
-					<input type="text" name="deleteInput" id="deleteInput" size=20 /><br />\
-					<input type="submit" value="Requête DELETE" />\
-					</form>'
-};
 
 // Sélection de la ressource à manipuler
 let select = document.getElementById("resource");
