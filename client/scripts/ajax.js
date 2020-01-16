@@ -9,7 +9,15 @@ function ajaxGet(url, callback) {
 	req.send(null);
 }
 
-//function ajaxPost()
+// Appel AJAX avec la méthode POST
+function ajaxPost(url, data, callback) {
+	let req = new XMLHttpRequest();
+	req.open("POST", url);
+	req.addEventListener("load", () => { callback(req.status, req.getAllResponseHeaders().split("\r\n"), req.responseText) });
+	req.setRequestHeader("Content-Type", "application/json");
+	data = JSON.stringify(data);
+	req.send(data);
+}
 
 //function ajaxPut()
 

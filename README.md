@@ -4,15 +4,14 @@
 **Consommation de l'API:**  
 Deux types de ressources: events ou organizers  
 
-| Requête                             | Résultat                                                                                  |
-| :---------------------------------- | :---------------------------------------------------------------------------------------- |
-| GET /{ressource}                    | renvoie tout les éléments de la ressource                                                 |
-| GET /{ressource}/{id élément}       | renvoie l'élément spécifié                                                                |
-| POST /{ressource}                   | crée un nouvel élément. Accepte des données de type JSON ou de type x-www-form-urlencoded |
-| PUT /{ressource}                    | crée de nouveaux éléments. Accepte des données sous forme de tableau de JSON              |
-| PUT /{ressource}/{id élément}       | mets l'élément spécifié à jour                                                            |
-| DELETE /{ressource}                 | supprime tout les éléments de la ressource                                                |
-| DELETE /{ressource}/{id élément}    | supprime l'élément spécifié                                                               |
+| Requête                             | Résultat                                                         |
+| :---------------------------------- | :--------------------------------------------------------------- |
+| GET /{ressource}                    | renvoie tout les éléments de la ressource                        |
+| GET /{ressource}/{id élément}       | renvoie l'élément spécifié                                       |
+| POST /{ressource}                   | crée un nouvel élément. Accepte des données de type JSON         |
+| PUT /{ressource}/{id élément}       | mets l'élément spécifié à jour. Accepte des données de type JSON |
+| DELETE /{ressource}                 | supprime tout les éléments de la ressource                       |
+| DELETE /{ressource}/{id élément}    | supprime l'élément spécifié                                      |
 
 *Chaque évenement se présente sous la forme d'un document MongoDB du type:*
 ```{
@@ -41,3 +40,5 @@ Deux types de ressources: events ou organizers
   release: ISODate("2019-12-05T12:00:00.000")
 }
 ```
+
+**Ajout d'un client sommaire pour tester l'API**

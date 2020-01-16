@@ -26,18 +26,20 @@ function addSubmitEvent(forms) {
 				case "GET":
 					ajaxGet("http://localhost:8080/" + resource + "/" + getInput.value, displayResults);
 					break;
+
 				case "POST":
-					let data;
-					if (e.target.id === "jsonPost") {
-						let file = document.getElementById("file");
-						data = file.files[0].name;
-					}
-					else
-						data = new FormData(e.target);
-					output.textContent = method + " /" + resource + "/  " + data;
+					// Création d'un objet JSON et insertion des champs du formulaire
+					let data = {};
+					let fields = e.target;
+					for (let i=0; i<fields.length-1; i++)
+						if (fields[i].value != "")
+							data[fields[i].name] = fields[i].value;
+					ajaxPost("http://localhost:8080/" + resource + "/", data, displayResults);
 					break;
+
 				case "PUT":
 					break;
+
 				case "DELETE":
 					let reset;
 					if (deleteInput.value === "")
